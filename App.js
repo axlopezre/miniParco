@@ -1,54 +1,56 @@
-// app.js
-const express = require('express')
-const path = require('path')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const app = express()
-const port = 3001
+const app = express();
+const port = 3001;
 
-app.use(bodyParser.json())
-app.use(express.json())
-app.use(express.static(path.join(__dirname, 'client', 'build')))
-const sequelize = require('./sequelize')
-const Estacionamiento = require('./models/Estacionamiento')
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+const sequelize = require('./sequelize');
+const Estacionamiento = require('./models/Estacionamiento');
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000'
   })
-)
+);
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`)
-})
+  console.log(`Express server listening on port ${port}`);
+});
+
+// Config Auth sso
+app.use(require('./config/auth.routes'));
 
 // Config Routes
-app.use(require('./config/routes'))
+app.use(require('./config/routes'));
 
 // Main path served by React application
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-})
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 // Management of any other route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-})
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 // SEQUELIZE-----
 async function startApp() {
   try {
-    await sequelize.authenticate()
-    console.log('Connection to the database established correctly.')
+    await sequelize.authenticate();
+    console.log('Connection to the database established correctly.');
 
     // Synchronize the model with the database
-    await Estacionamiento.sync()
-    console.log('Model Parking synchronized correctly.')
+    await Estacionamiento.sync();
+    console.log('Model Parking synchronized correctly.');
   } catch (error) {
-    console.error('Error connecting to database:', error)
+    console.error('Error connecting to database:', error);
   }
 }
 
-startApp()
+startApp();
