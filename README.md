@@ -7,7 +7,7 @@ Proyecto backend de miniParco en nodejs
 docker run --network=bridge --name postgreSQLContainer -e POSTGRES_PASSWORD=12345 -p 5432:5432 -d postgres
 
 4. Creamos el contenedor docker de la aplicación miniParco:
-
+docker build -t parkinglotimage .
 docker run --network=bridge -p 3001:3001 -d parkinglotimage
 
 5. Accedemos al contenedor postgre:
